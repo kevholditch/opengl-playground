@@ -13,6 +13,7 @@ import (
 const (
 	width, height = 800, 600
 	sizeOfFloat32 = 4
+	sizeOfInt32   = 4
 )
 
 func init() {
@@ -126,15 +127,22 @@ func main() {
 		panic(err)
 	}
 	window.MakeContextCurrent()
+	glfw.SwapInterval(1)
 
 	if err := gl.Init(); err != nil {
 		panic(err)
 	}
 
+	indices := []int32{
+		0, 1, 2,
+		0, 3, 2,
+	}
+
 	positions := []float32{
 		-0.5, -0.5,
-		0.0, 0.5,
 		0.5, -0.5,
+		0.5, 0.5,
+		-0.5, 0.5,
 	}
 
 	var vao uint32
@@ -146,20 +154,37 @@ func main() {
 	gl.BindBuffer(gl.ARRAY_BUFFER, buffer)
 	gl.BufferData(gl.ARRAY_BUFFER, len(positions)*sizeOfFloat32, gl.Ptr(positions), gl.STATIC_DRAW)
 
+	var ibo uint32
+	gl.GenBuffers(1, &ibo)
+	gl.BindBuffer(gl.ELEMENT_ARRAY_BUFFER, ibo)
+	gl.BufferData(gl.ELEMENT_ARRAY_BUFFER, len(indices)*sizeOfInt32, gl.Ptr(indices), gl.STATIC_DRAW)
+
 	gl.EnableVertexAttribArray(0)
 	gl.VertexAttribPointer(0, 2, gl.FLOAT, false, sizeOfFloat32*2, gl.PtrOffset(0))
 
 	gl.BindBuffer(gl.ARRAY_BUFFER, 0)
 
-	shader := createShader("./triangle2/vertex.shader", "./triangle2/fragment.shader")
+	shader := createShader("./square2/vertex.shader", "./square2/fragment.shader")
 
 	gl.UseProgram(shader)
+
+	location := gl.GetUniformLocation(shader, gl.Str("u_Color"+"\x00"))
+
+	r := float32(0.0)
+	increment := float32(0.05)
 
 	for !window.ShouldClose() {
 
 		gl.Clear(gl.COLOR_BUFFER_BIT)
-		gl.DrawArrays(gl.TRIANGLES, 0, 3)
-		//checkErrors()
+		gl.Uniform4f(location, r, 0.3, 0.1, 1.0)
+		gl.DrawElements(gl.TRIANGLES, 6, gl.UNSIGNED_INT, gl.PtrOffset(0))
+
+		if r > 1.0 {
+			increment = -0.05
+		} else if r < 0.0 {
+			increment = 0.05
+		}
+		r += increment
 
 		window.SwapBuffers()
 		glfw.PollEvents()

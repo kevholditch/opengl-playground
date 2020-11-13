@@ -14,7 +14,7 @@ func init() {
 	runtime.LockOSThread()
 }
 
-func main()  {
+func main() {
 	if err := glfw.Init(); err != nil {
 		log.Fatalln("failed to initialize glfw:", err)
 	}
@@ -41,7 +41,6 @@ func main()  {
 		gl.Vertex2f(0.0, 0.5)
 		gl.Vertex2f(0.5, -0.5)
 		gl.End()
-
 
 		window.SwapBuffers()
 		glfw.PollEvents()

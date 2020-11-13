@@ -13,6 +13,7 @@ import (
 const (
 	width, height = 800, 600
 	sizeOfFloat32 = 4
+	sizeOfInt32   = 4
 )
 
 func init() {
@@ -53,7 +54,7 @@ func shaderFromFile(file string, sType uint32) (*uint32, error) {
 	gl.ShaderSource(handle, 1, glSrc, nil)
 	gl.CompileShader(handle)
 	err = getGlError(handle, gl.COMPILE_STATUS, gl.GetShaderiv, gl.GetShaderInfoLog,
-		"SHADER::COMPILE_FAILURE::" + file)
+		"SHADER::COMPILE_FAILURE::"+file)
 	if err != nil {
 		return nil, err
 	}
@@ -96,7 +97,6 @@ func createShader(vertexShader, fragmentShader string) uint32 {
 	gl.DeleteShader(*vs)
 	gl.DeleteShader(*fs)
 
-
 	return program
 }
 
@@ -110,8 +110,7 @@ func checkErrors() {
 	}
 }
 
-
-func main()  {
+func main() {
 	if err := glfw.Init(); err != nil {
 		log.Fatalln("failed to initialize glfw:", err)
 	}
@@ -133,18 +132,16 @@ func main()  {
 		panic(err)
 	}
 
-	/*
-
-
-	 */
+	indices := []int32{
+		0, 1, 2,
+		0, 3, 2,
+	}
 
 	positions := []float32{
 		-0.5, -0.5,
 		0.5, -0.5,
 		0.5, 0.5,
-		-0.5, -0.5,
 		-0.5, 0.5,
-		0.5, 0.5,
 	}
 
 	var vao uint32
@@ -154,22 +151,27 @@ func main()  {
 	var buffer uint32
 	gl.GenBuffers(1, &buffer)
 	gl.BindBuffer(gl.ARRAY_BUFFER, buffer)
-	gl.BufferData(gl.ARRAY_BUFFER, len(positions) *sizeOfFloat32, gl.Ptr(positions), gl.STATIC_DRAW)
+	gl.BufferData(gl.ARRAY_BUFFER, len(positions)*sizeOfFloat32, gl.Ptr(positions), gl.STATIC_DRAW)
+
+	var ibo uint32
+	gl.GenBuffers(1, &ibo)
+	gl.BindBuffer(gl.ELEMENT_ARRAY_BUFFER, ibo)
+	gl.BufferData(gl.ELEMENT_ARRAY_BUFFER, len(indices)*sizeOfInt32, gl.Ptr(indices), gl.STATIC_DRAW)
 
 	gl.EnableVertexAttribArray(0)
-	gl.VertexAttribPointer(0, 2, gl.FLOAT, false, sizeOfFloat32* 2, gl.PtrOffset(0))
-
+	gl.VertexAttribPointer(0, 2, gl.FLOAT, false, sizeOfFloat32*2, gl.PtrOffset(0))
 
 	gl.BindBuffer(gl.ARRAY_BUFFER, 0)
 
-	shader := createShader("./triangle2/vertex.shader", "./triangle2/particle.shader")
+	shader := createShader("./square1/vertex.shader", "./square1/fragment.shader")
 
 	gl.UseProgram(shader)
 
 	for !window.ShouldClose() {
 
 		gl.Clear(gl.COLOR_BUFFER_BIT)
-		gl.DrawArrays(gl.TRIANGLES, 0, 6)
+		//gl.DrawArrays(gl.TRIANGLES, 0, 6)
+		gl.DrawElements(gl.TRIANGLES, 6, gl.UNSIGNED_INT, gl.PtrOffset(0))
 		//checkErrors()
 
 		window.SwapBuffers()
