@@ -10,7 +10,10 @@ import (
 	"strings"
 )
 
-const width, height = 800, 600
+const (
+	width, height = 800, 600
+	sizeOfFloat32 = 4
+)
 
 func init() {
 	// GLFW event handling must run on the main OS thread
@@ -148,10 +151,10 @@ func main()  {
 	var buffer uint32
 	gl.GenBuffers(1, &buffer)
 	gl.BindBuffer(gl.ARRAY_BUFFER, buffer)
-	gl.BufferData(gl.ARRAY_BUFFER, len(positions) * 4, gl.Ptr(positions), gl.STATIC_DRAW)
+	gl.BufferData(gl.ARRAY_BUFFER, len(positions) *sizeOfFloat32, gl.Ptr(positions), gl.STATIC_DRAW)
 
 	gl.EnableVertexAttribArray(0)
-	gl.VertexAttribPointer(0, 2, gl.FLOAT, false, 4 * 2, gl.PtrOffset(0))
+	gl.VertexAttribPointer(0, 2, gl.FLOAT, false, sizeOfFloat32* 2, gl.PtrOffset(0))
 
 
 	gl.BindBuffer(gl.ARRAY_BUFFER, 0)
