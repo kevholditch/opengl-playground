@@ -141,6 +141,10 @@ func main()  {
 		0.5, -0.5,
 	}
 
+	var vao uint32
+	gl.GenVertexArrays(1, &vao)
+	gl.BindVertexArray(vao)
+
 	var buffer uint32
 	gl.GenBuffers(1, &buffer)
 	gl.BindBuffer(gl.ARRAY_BUFFER, buffer)
