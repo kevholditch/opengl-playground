@@ -99,13 +99,8 @@ func main() {
 	}
 
 	vao := graf.NewVertexArray()
-	vao.Bind()
-
 	vb := graf.NewVertexBuffer(positions)
-	vb.Bind()
-
 	ibo := graf.NewIndexBuffer(indices)
-	ibo.Bind()
 
 	gl.EnableVertexAttribArray(0)
 	gl.VertexAttribPointer(0, 2, gl.FLOAT, false, sizeOfFloat32*2, gl.PtrOffset(0))
@@ -117,7 +112,6 @@ func main() {
 		panic(err)
 	}
 
-
 	fs, err := graf.NewShaderFromFile("./square3/fragment.shader", gl.FRAGMENT_SHADER)
 	if err != nil {
 		panic(err)
@@ -128,8 +122,10 @@ func main() {
 		panic(err)
 	}
 
-	program.Bind()
-
+	vao.UnBind()
+	vb.Unbind()
+	ibo.UnBind()
+	program.UnBind()
 
 	r := float32(0.0)
 	increment := float32(0.05)
@@ -137,6 +133,10 @@ func main() {
 	for !window.ShouldClose() {
 
 		gl.Clear(gl.COLOR_BUFFER_BIT)
+		vao.Bind()
+		vb.Bind()
+		ibo.Bind()
+		program.Bind()
 		program.SetUniformValue("u_Color", r, 0.3, 0.8, 1.0)
 		gl.DrawElements(gl.TRIANGLES, 6, gl.UNSIGNED_INT, gl.PtrOffset(0))
 
