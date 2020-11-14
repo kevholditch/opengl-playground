@@ -27,4 +27,3 @@ func getGlError(glHandle uint32, checkTrueParam uint32, getObjIvFn getObjIv,
 
 	return nil
 }
-

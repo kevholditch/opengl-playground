@@ -5,12 +5,10 @@ import (
 	"io/ioutil"
 )
 
-
 type Shader struct {
 	Handle uint32
-	Type uint32
+	Type   uint32
 }
-
 
 func NewShaderFromFile(file string, sType uint32) (*Shader, error) {
 	src, err := ioutil.ReadFile(file)
@@ -34,7 +32,7 @@ type Program struct {
 	Handle uint32
 }
 
-func NewProgram(shaders... *Shader) (*Program, error) {
+func NewProgram(shaders ...*Shader) (*Program, error) {
 	handle := gl.CreateProgram()
 
 	for _, shader := range shaders {
@@ -43,7 +41,6 @@ func NewProgram(shaders... *Shader) (*Program, error) {
 
 	gl.LinkProgram(handle)
 	gl.ValidateProgram(handle)
-
 
 	for _, shader := range shaders {
 		gl.DeleteShader(shader.Handle)
@@ -61,10 +58,9 @@ func (p *Program) UnBind() {
 }
 
 func (p *Program) getUniformLocation(name string) int32 {
-	return gl.GetUniformLocation(p.Handle, gl.Str(name + "\x00"))
+	return gl.GetUniformLocation(p.Handle, gl.Str(name+"\x00"))
 }
 
-func (p *Program) SetUniformValue(name string, v1, v2, v3, v4 float32)  {
+func (p *Program) SetUniformValue(name string, v1, v2, v3, v4 float32) {
 	gl.Uniform4f(p.getUniformLocation(name), v1, v2, v3, v4)
 }
-
