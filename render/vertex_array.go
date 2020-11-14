@@ -19,11 +19,11 @@ func NewVertexArray() *VertexArray {
 func (v *VertexArray) AddBuffer(vb *VertexBuffer, layout *VertexBufferLayout) {
 	vb.Bind()
 
-	offset := int32(0)
+	offset := 0
 	for i := uint32(0); i < uint32(len(layout.elements)); i++ {
 		gl.EnableVertexAttribArray(i)
-		gl.VertexAttribPointer(i, layout.elements[i].getCount(), gl.FLOAT, false, layout.elements[i].getStride(), gl.PtrOffset(0))
-		offset += layout.elements[i].getStride()
+		gl.VertexAttribPointer(i, layout.elements[i].getCount(), gl.FLOAT, false, layout.getStride(), gl.PtrOffset(offset))
+		offset += int(layout.elements[i].getSize())
 	}
 
 }

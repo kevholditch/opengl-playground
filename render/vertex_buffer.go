@@ -40,12 +40,20 @@ func NewVertexBufferLayout() *VertexBufferLayout {
 	}
 }
 
+func (l *VertexBufferLayout) getStride() int32 {
+	size := int32(0)
+	for _, e := range l.elements {
+		size += e.getSize()
+	}
+	return size
+}
+
 func (l *VertexBufferLayout) AddLayout(floatCount int32) *VertexBufferLayout {
 	l.elements = append(l.elements, VertexBufferElement{count: floatCount})
 	return l
 }
 
-func (e *VertexBufferElement) getStride() int32 {
+func (e *VertexBufferElement) getSize() int32 {
 	return e.count * sizeOfFloat32
 }
 

@@ -61,6 +61,9 @@ func (p *Program) getUniformLocation(name string) int32 {
 	return gl.GetUniformLocation(p.Handle, gl.Str(name+"\x00"))
 }
 
-func (p *Program) SetUniformValue(name string, v1, v2, v3, v4 float32) {
-	gl.Uniform4f(p.getUniformLocation(name), v1, v2, v3, v4)
+func (p *Program) SetUniformVec4(name string, v0, v1, v2, v3 float32) {
+	gl.Uniform4f(p.getUniformLocation(name), v0, v1, v2, v3)
+}
+func (p *Program) SetUniformI1(name string, v0 int32) {
+	gl.Uniform1i(p.getUniformLocation(name), v0)
 }

@@ -46,23 +46,23 @@ func main() {
 	}
 
 	positions := []float32{
-		-0.5, -0.5,
-		0.5, -0.5,
-		0.5, 0.5,
-		-0.5, 0.5,
+		-0.5, -0.5, 0.0, 0.0,
+		0.5, -0.5, 1.0, 0.0,
+		0.5, 0.5, 1.0, 1.0,
+		-0.5, 0.5, 0.0, 1.0,
 	}
 
 	va := render.NewVertexArray()
 	ib := render.NewIndexBuffer(indices)
 
-	va.AddBuffer(render.NewVertexBuffer(positions), render.NewVertexBufferLayout().AddLayout(2))
+	va.AddBuffer(render.NewVertexBuffer(positions), render.NewVertexBufferLayout().AddLayout(2).AddLayout(2))
 
-	vs, err := render.NewShaderFromFile("./square3/vertex.shader", gl.VERTEX_SHADER)
+	vs, err := render.NewShaderFromFile("./tex/vertex.shader", gl.VERTEX_SHADER)
 	if err != nil {
 		panic(err)
 	}
 
-	fs, err := render.NewShaderFromFile("./square3/fragment.shader", gl.FRAGMENT_SHADER)
+	fs, err := render.NewShaderFromFile("./tex/fragment.shader", gl.FRAGMENT_SHADER)
 	if err != nil {
 		panic(err)
 	}
@@ -71,6 +71,13 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
+
+	texture, err := render.NewTextureFromFile("./tex/form3.png")
+	if err != nil {
+		panic(err)
+	}
+	texture.Bind(0)
+	program.SetUniformI1("u_Texture", 0)
 
 	va.UnBind()
 	ib.UnBind()
@@ -84,7 +91,6 @@ func main() {
 		render.Clear()
 
 		program.Bind()
-		program.SetUniformVec4("u_Color", r, 0.3, 0.8, 1.0)
 
 		render.Render(va, ib, program)
 
