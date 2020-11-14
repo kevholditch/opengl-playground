@@ -36,9 +36,13 @@ func main() {
 	window.MakeContextCurrent()
 	glfw.SwapInterval(1)
 
+
 	if err := gl.Init(); err != nil {
 		panic(err)
 	}
+
+	gl.Enable(gl.BLEND)
+	gl.BlendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA)
 
 	indices := []int32{
 		0, 1, 2,
