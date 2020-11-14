@@ -1,4 +1,4 @@
-package graf
+package render
 
 import (
 	"fmt"

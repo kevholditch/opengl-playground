@@ -3,7 +3,7 @@ package main
 import (
 	"github.com/go-gl/gl/v2.1/gl"
 	"github.com/go-gl/glfw/v3.3/glfw"
-	"github.com/kevholditch/opengl-playground/graf"
+	"github.com/kevholditch/opengl-playground/render"
 	"log"
 	"runtime"
 )
@@ -52,22 +52,22 @@ func main() {
 		-0.5, 0.5,
 	}
 
-	va := graf.NewVertexArray()
-	ib := graf.NewIndexBuffer(indices)
+	va := render.NewVertexArray()
+	ib := render.NewIndexBuffer(indices)
 
-	va.AddBuffer(graf.NewVertexBuffer(positions), graf.NewVertexBufferLayout().AddLayout(2))
+	va.AddBuffer(render.NewVertexBuffer(positions), render.NewVertexBufferLayout().AddLayout(2))
 
-	vs, err := graf.NewShaderFromFile("./square3/vertex.shader", gl.VERTEX_SHADER)
+	vs, err := render.NewShaderFromFile("./square3/vertex.shader", gl.VERTEX_SHADER)
 	if err != nil {
 		panic(err)
 	}
 
-	fs, err := graf.NewShaderFromFile("./square3/fragment.shader", gl.FRAGMENT_SHADER)
+	fs, err := render.NewShaderFromFile("./square3/fragment.shader", gl.FRAGMENT_SHADER)
 	if err != nil {
 		panic(err)
 	}
 
-	program, err := graf.NewProgram(vs, fs)
+	program, err := render.NewProgram(vs, fs)
 	if err != nil {
 		panic(err)
 	}
@@ -81,12 +81,12 @@ func main() {
 
 	for !window.ShouldClose() {
 
-		graf.Clear()
+		render.Clear()
 
 		program.Bind()
 		program.SetUniformValue("u_Color", r, 0.3, 0.8, 1.0)
 
-		graf.Render(va, ib, program)
+		render.Render(va, ib, program)
 
 		if r > 1.0 {
 			increment = -0.05
