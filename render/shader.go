@@ -2,6 +2,7 @@ package render
 
 import (
 	"github.com/go-gl/gl/v2.1/gl"
+	"github.com/go-gl/mathgl/mgl32"
 	"io/ioutil"
 )
 
@@ -64,6 +65,11 @@ func (p *Program) getUniformLocation(name string) int32 {
 func (p *Program) SetUniformVec4(name string, v0, v1, v2, v3 float32) {
 	gl.Uniform4f(p.getUniformLocation(name), v0, v1, v2, v3)
 }
+
 func (p *Program) SetUniformI1(name string, v0 int32) {
 	gl.Uniform1i(p.getUniformLocation(name), v0)
+}
+func (p *Program) SetUniformMat4f(name string, m0 mgl32.Mat4) {
+	location := p.getUniformLocation(name)
+	gl.UniformMatrix4fv(location, 1, false, &m0[0])
 }
