@@ -70,6 +70,5 @@ func (p *Program) SetUniformI1(name string, v0 int32) {
 	gl.Uniform1i(p.getUniformLocation(name), v0)
 }
 func (p *Program) SetUniformMat4f(name string, m0 mgl32.Mat4) {
-	location := p.getUniformLocation(name)
-	gl.UniformMatrix4fv(location, 1, false, &m0[0])
+	gl.UniformMatrix4fv(p.getUniformLocation(name), 1, false, &m0[0])
 }
