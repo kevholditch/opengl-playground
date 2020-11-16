@@ -6,7 +6,6 @@ import (
 	"github.com/go-gl/glfw/v3.3/glfw"
 	"github.com/go-gl/mathgl/mgl32"
 	"github.com/kevholditch/opengl-playground/render"
-	"log"
 	"runtime"
 )
 
@@ -30,22 +29,22 @@ func checkErrors() {
 }
 
 func main() {
-	if err := glfw.Init(); err != nil {
-		log.Fatalln("failed to initialize glfw:", err)
-	}
-	defer glfw.Terminate()
 
-	glfw.WindowHint(glfw.Resizable, glfw.False)
-	glfw.WindowHint(glfw.ContextVersionMajor, 3)
-	glfw.WindowHint(glfw.ContextVersionMinor, 2)
-	glfw.WindowHint(glfw.OpenGLProfile, glfw.OpenGLCoreProfile)
-	glfw.WindowHint(glfw.OpenGLForwardCompatible, gl.TRUE)
+	cleanUp := render.Initialise()
+	defer cleanUp()
 
-	window, err := glfw.CreateWindow(width, height, "Kevin - Demo", nil, nil)
+	w, err := render.NewWindow(render.Config{
+		MajorVersion: 3,
+		MinorVersion: 2,
+		Width:        width,
+		Height:       height,
+		Title:        "Texture Demo - Kevin Holditch",
+	})
+
 	if err != nil {
 		panic(err)
 	}
-	window.MakeContextCurrent()
+
 	glfw.SwapInterval(1)
 
 	if err := gl.Init(); err != nil {
@@ -104,7 +103,7 @@ func main() {
 	r := float32(0.0)
 	increment := float32(0.05)
 
-	for !window.ShouldClose() {
+	for !w.ShouldClose() {
 
 		render.Clear()
 
@@ -120,7 +119,7 @@ func main() {
 		}
 		r += increment
 
-		window.SwapBuffers()
+		w.SwapBuffers()
 		glfw.PollEvents()
 	}
 }
