@@ -27,3 +27,13 @@ func getGlError(glHandle uint32, checkTrueParam uint32, getObjIvFn getObjIv,
 
 	return nil
 }
+
+func CheckErrors() {
+	for {
+		e := gl.GetError()
+		if e == gl.NO_ERROR {
+			break
+		}
+		fmt.Printf("error is :%v\n", e)
+	}
+}

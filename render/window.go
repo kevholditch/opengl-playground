@@ -8,17 +8,17 @@ import (
 type Config struct {
 	MajorVersion int
 	MinorVersion int
-	Width int
-	Height int
-	Title string
+	Width        int
+	Height       int
+	Title        string
+	SwapInterval int
 }
 
 type Window struct {
 	handle *glfw.Window
 }
 
-
-func NewWindow(cfg Config) (*Window, error){
+func NewWindow(cfg Config) (*Window, error) {
 
 	glfw.WindowHint(glfw.Resizable, glfw.False)
 	glfw.WindowHint(glfw.ContextVersionMajor, cfg.MajorVersion)
@@ -32,6 +32,8 @@ func NewWindow(cfg Config) (*Window, error){
 	}
 	window.MakeContextCurrent()
 
+	glfw.SwapInterval(cfg.SwapInterval)
+
 	return &Window{handle: window}, nil
 }
 
@@ -39,8 +41,6 @@ func (w *Window) ShouldClose() bool {
 	return w.handle.ShouldClose()
 }
 
-
 func (w *Window) SwapBuffers() {
 	w.handle.SwapBuffers()
 }
-

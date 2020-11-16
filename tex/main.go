@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"github.com/go-gl/gl/v2.1/gl"
 	"github.com/go-gl/glfw/v3.3/glfw"
 	"github.com/go-gl/mathgl/mgl32"
@@ -18,16 +17,6 @@ func init() {
 	runtime.LockOSThread()
 }
 
-func checkErrors() {
-	for {
-		e := gl.GetError()
-		if e == gl.NO_ERROR {
-			break
-		}
-		fmt.Printf("error is :%v\n", e)
-	}
-}
-
 func main() {
 
 	cleanUp := render.Initialise()
@@ -39,20 +28,14 @@ func main() {
 		Width:        width,
 		Height:       height,
 		Title:        "Texture Demo - Kevin Holditch",
+		SwapInterval: 1,
 	})
 
 	if err != nil {
 		panic(err)
 	}
 
-	glfw.SwapInterval(1)
-
-	if err := gl.Init(); err != nil {
-		panic(err)
-	}
-
-	gl.Enable(gl.BLEND)
-	gl.BlendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA)
+	render.UseDefaultBlending()
 
 	indices := []int32{
 		0, 1, 2,
@@ -100,9 +83,6 @@ func main() {
 	ib.UnBind()
 	program.UnBind()
 
-	r := float32(0.0)
-	increment := float32(0.05)
-
 	for !w.ShouldClose() {
 
 		render.Clear()
@@ -111,13 +91,6 @@ func main() {
 		program.SetUniformMat4f("u_MVP", proj)
 
 		render.Render(va, ib, program)
-
-		if r > 1.0 {
-			increment = -0.05
-		} else if r < 0.0 {
-			increment = 0.05
-		}
-		r += increment
 
 		w.SwapBuffers()
 		glfw.PollEvents()
