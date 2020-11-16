@@ -11,7 +11,7 @@ import (
 )
 
 const (
-	width, height = 800, 600
+	width, height = 1024, 768
 )
 
 func init() {
@@ -61,16 +61,16 @@ func main() {
 	}
 
 	positions := []float32{
-		-0.5, -0.5, 0.0, 0.0,
-		0.5, -0.5, 1.0, 0.0,
-		0.5, 0.5, 1.0, 1.0,
-		-0.5, 0.5, 0.0, 1.0,
+		200, 200, 0.0, 0.0,
+		500, 200, 1.0, 0.0,
+		500, 500, 1.0, 1.0,
+		200, 500, 0.0, 1.0,
 	}
 
 	va := render.NewVertexArray()
 	ib := render.NewIndexBuffer(indices)
 
-	proj := mgl32.Ortho(-2.0, 2.0, -1.5, 1.5, -1.0, 1.0)
+	proj := mgl32.Ortho(0, width, 0, height, -1.0, 1.0)
 
 	va.AddBuffer(render.NewVertexBuffer(positions), render.NewVertexBufferLayout().AddLayout(2).AddLayout(2))
 
