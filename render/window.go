@@ -1,6 +1,7 @@
 package render
 
 import (
+	"fmt"
 	"github.com/go-gl/gl/v2.1/gl"
 	"github.com/go-gl/glfw/v3.3/glfw"
 )
@@ -32,9 +33,20 @@ func NewWindow(cfg Config) (*Window, error) {
 	}
 	window.MakeContextCurrent()
 
+	window.SetKeyCallback(func(w *glfw.Window, key glfw.Key, scancode int, action glfw.Action, mods glfw.ModifierKey) {
+		fmt.Printf("%d\n", key)
+
+	})
+
 	glfw.SwapInterval(cfg.SwapInterval)
 
 	return &Window{handle: window}, nil
+}
+
+func (w *Window) OnKeyPress(onPressFunc func (key int))  {
+	w.handle.SetKeyCallback(func(w *glfw.Window, key glfw.Key, scancode int, action glfw.Action, mods glfw.ModifierKey) {
+		onPressFunc(int(key))
+	})
 }
 
 func (w *Window) ShouldClose() bool {

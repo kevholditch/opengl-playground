@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"github.com/go-gl/gl/v2.1/gl"
 	"github.com/go-gl/glfw/v3.3/glfw"
 	"github.com/go-gl/mathgl/mgl32"
@@ -54,6 +55,9 @@ func main() {
 
 	proj := mgl32.Ortho(0, width, 0, height, -1.0, 1.0)
 
+	x := float32(0)
+	y := float32(0)
+
 	va.AddBuffer(render.NewVertexBuffer(positions), render.NewVertexBufferLayout().AddLayout(2).AddLayout(2))
 
 	vs, err := render.NewShaderFromFile("./tex/vertex.shader", gl.VERTEX_SHADER)
@@ -83,12 +87,25 @@ func main() {
 	ib.UnBind()
 	program.UnBind()
 
+	increment := float32(5)
+	w.OnKeyPress(func(key int) {
+		fmt.Printf("%v\n", key)
+		switch key {
+			case 70: x += increment
+			case 65: x -= increment
+			case 83: y -= increment
+			case 68: y += increment
+		}
+	})
+
 	for !w.ShouldClose() {
 
 		render.Clear()
 
 		program.Bind()
-		program.SetUniformMat4f("u_MVP", proj)
+		m := mgl32.Ident4().Mul4(mgl32.Translate3D(x, y, 0))
+		mvp := proj.Mul4(m)
+		program.SetUniformMat4f("u_MVP", mvp)
 
 		render.Render(va, ib, program)
 
