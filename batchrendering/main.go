@@ -44,15 +44,15 @@ func main() {
 		4, 7, 6,
 	}
 
-	positions := []float32{
-		200, 200,
-		500, 200,
-		500, 500,
-		200, 500,
-		600, 200,
-		900, 200,
-		900, 500,
-		600, 500,
+	buffer := []float32{
+		200, 200, 0.4, 0.3, 0.2, 1.0,
+		500, 200, 0.4, 0.3, 0.2, 1.0,
+		500, 500, 0.4, 0.3, 0.2, 1.0,
+		200, 500, 0.4, 0.3, 0.2, 1.0,
+		600, 200, 0.8, 0.2, 0.2, 1.0,
+		900, 200, 0.2, 0.8, 0.2, 1.0,
+		900, 500, 0.8, 0.2, 0.2, 1.0,
+		600, 500, 0.2, 0.8, 0.2, 1.0,
 	}
 
 	va := render.NewVertexArray()
@@ -60,7 +60,7 @@ func main() {
 
 	proj := mgl32.Ortho(0, width, 0, height, -1.0, 1.0)
 
-	va.AddBuffer(render.NewVertexBuffer(positions), render.NewVertexBufferLayout().AddLayout(2))
+	va.AddBuffer(render.NewVertexBuffer(buffer), render.NewVertexBufferLayout().AddLayout(2).AddLayout(4))
 
 	vs, err := render.NewShaderFromFile("./batchrendering/vertex.shader", gl.VERTEX_SHADER)
 	if err != nil {
@@ -77,7 +77,6 @@ func main() {
 		panic(err)
 	}
 
-	program.SetUniformVec4("u_Color", 0.2, 0.2, 0.2, 1.0)
 	program.SetUniformMat4f("u_MVP", proj)
 
 	va.UnBind()
@@ -92,7 +91,6 @@ func main() {
 		render.CheckErrors()
 
 		program.Bind()
-		program.SetUniformVec4("u_Color", 0.8, 0.8, 0.2, 1.0)
 		program.SetUniformMat4f("u_MVP", proj)
 
 		render.Render(va, ib, program)
