@@ -59,7 +59,8 @@ func (p *Program) UnBind() {
 }
 
 func (p *Program) getUniformLocation(name string) int32 {
-	return gl.GetUniformLocation(p.Handle, gl.Str(name+"\x00"))
+	l := gl.GetUniformLocation(p.Handle, gl.Str(name+"\x00"))
+	return l
 }
 
 func (p *Program) SetUniformVec4(name string, v0, v1, v2, v3 float32) {
