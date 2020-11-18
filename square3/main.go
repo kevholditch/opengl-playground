@@ -55,7 +55,7 @@ func main() {
 	va := render.NewVertexArray()
 	ib := render.NewIndexBuffer(indices)
 
-	va.AddBuffer(render.NewVertexBuffer(positions), render.NewVertexBufferLayout().AddLayout(2))
+	va.AddBuffer(render.NewVertexBuffer(positions), render.NewVertexBufferLayout().AddLayoutFloats(2))
 
 	vs, err := render.NewShaderFromFile("./square3/vertex.shader", gl.VERTEX_SHADER)
 	if err != nil {

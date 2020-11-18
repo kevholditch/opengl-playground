@@ -48,7 +48,7 @@ func (l *VertexBufferLayout) getStride() int32 {
 	return size
 }
 
-func (l *VertexBufferLayout) AddLayout(floatCount int32) *VertexBufferLayout {
+func (l *VertexBufferLayout) AddLayoutFloats(floatCount int32) *VertexBufferLayout {
 	l.elements = append(l.elements, VertexBufferElement{count: floatCount})
 	return l
 }

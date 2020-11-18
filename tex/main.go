@@ -54,7 +54,7 @@ func main() {
 
 	proj := mgl32.Ortho(0, width, 0, height, -1.0, 1.0)
 
-	va.AddBuffer(render.NewVertexBuffer(positions), render.NewVertexBufferLayout().AddLayout(2).AddLayout(2))
+	va.AddBuffer(render.NewVertexBuffer(positions), render.NewVertexBufferLayout().AddLayoutFloats(2).AddLayoutFloats(2))
 
 	vs, err := render.NewShaderFromFile("./tex/vertex.shader", gl.VERTEX_SHADER)
 	if err != nil {
@@ -86,22 +86,29 @@ func main() {
 	x, y := float32(0), float32(0)
 	vx, vy := float32(0), float32(0)
 
-
 	increment := float32(5)
 	w.OnKeyPress(func(key int) {
 
 		switch key {
 		// move model
-			case 70: x += increment
-			case 65: x -= increment
-			case 83: y -= increment
-			case 68: y += increment
+		case 70:
+			x += increment
+		case 65:
+			x -= increment
+		case 83:
+			y -= increment
+		case 68:
+			y += increment
 
-		// move camera/view
-			case 90: vx += increment
-			case 88: vx -= increment
-			case 67: vy -= increment
-			case 86: vy += increment
+			// move camera/view
+		case 90:
+			vx += increment
+		case 88:
+			vx -= increment
+		case 67:
+			vy -= increment
+		case 86:
+			vy += increment
 		}
 	})
 

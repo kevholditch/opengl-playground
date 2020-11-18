@@ -30,7 +30,8 @@ func NewShaderFromFile(file string, sType uint32) (*Shader, error) {
 }
 
 type Program struct {
-	Handle uint32
+	Handle       uint32
+	uniformCache map[string]int32
 }
 
 func NewProgram(shaders ...*Shader) (*Program, error) {
@@ -47,7 +48,7 @@ func NewProgram(shaders ...*Shader) (*Program, error) {
 		gl.DeleteShader(shader.Handle)
 	}
 
-	return &Program{Handle: handle}, nil
+	return &Program{Handle: handle, uniformCache: map[string]int32{}}, nil
 }
 
 func (p *Program) Bind() {
@@ -59,8 +60,14 @@ func (p *Program) UnBind() {
 }
 
 func (p *Program) getUniformLocation(name string) int32 {
-	l := gl.GetUniformLocation(p.Handle, gl.Str(name+"\x00"))
-	return l
+	v, ok := p.uniformCache[name]
+	if ok {
+		return v
+	}
+
+	location := gl.GetUniformLocation(p.Handle, gl.Str(name+"\x00"))
+	p.uniformCache[name] = location
+	return location
 }
 
 func (p *Program) SetUniformVec4(name string, v0, v1, v2, v3 float32) {

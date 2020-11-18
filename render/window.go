@@ -43,7 +43,7 @@ func NewWindow(cfg Config) (*Window, error) {
 	return &Window{handle: window}, nil
 }
 
-func (w *Window) OnKeyPress(onPressFunc func (key int))  {
+func (w *Window) OnKeyPress(onPressFunc func(key int)) {
 	w.handle.SetKeyCallback(func(w *glfw.Window, key glfw.Key, scancode int, action glfw.Action, mods glfw.ModifierKey) {
 		onPressFunc(int(key))
 	})

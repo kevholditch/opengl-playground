@@ -60,7 +60,7 @@ func main() {
 
 	proj := mgl32.Ortho(0, width, 0, height, -1.0, 1.0)
 
-	va.AddBuffer(render.NewVertexBuffer(buffer), render.NewVertexBufferLayout().AddLayout(2).AddLayout(4))
+	va.AddBuffer(render.NewVertexBuffer(buffer), render.NewVertexBufferLayout().AddLayoutFloats(2).AddLayoutFloats(4))
 
 	vs, err := render.NewShaderFromFile("./batchrendering/vertex.shader", gl.VERTEX_SHADER)
 	if err != nil {
@@ -82,7 +82,6 @@ func main() {
 	va.UnBind()
 	ib.UnBind()
 	program.UnBind()
-
 
 	for !w.ShouldClose() {
 
