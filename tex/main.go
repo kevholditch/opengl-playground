@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"github.com/go-gl/gl/v2.1/gl"
 	"github.com/go-gl/glfw/v3.3/glfw"
 	"github.com/go-gl/mathgl/mgl32"
@@ -90,7 +89,7 @@ func main() {
 
 	increment := float32(5)
 	w.OnKeyPress(func(key int) {
-		fmt.Printf("%v\n", key)
+
 		switch key {
 		// move model
 			case 70: x += increment
