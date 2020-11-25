@@ -58,6 +58,7 @@ func main() {
 	va := render.NewVertexArray()
 	ib := render.NewIndexBuffer(indices)
 
+
 	proj := mgl32.Ortho(0, width, 0, height, -1.0, 1.0)
 
 	va.AddBuffer(render.NewVertexBuffer(buffer), render.NewVertexBufferLayout().AddLayoutFloats(2).AddLayoutFloats(4))
