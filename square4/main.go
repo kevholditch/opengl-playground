@@ -17,6 +17,9 @@ const (
 	sizeOfInt32   = 4
 )
 
+// Added a variable to store the position of the square
+var squarePos float32 = 0.0
+
 func init() {
 	// GLFW event handling must run on the main OS thread
 	runtime.LockOSThread()
@@ -166,14 +169,35 @@ func main() {
 
 	shader := createShader("./vertex.shader", "./fragment.shader")
 
+	// Retrieve the location of the 'position' uniform in the shader
+	positionUniform := gl.GetUniformLocation(shader, gl.Str("position\x00"))
+	if positionUniform == -1 {
+		panic("Could not find uniform position")
+	}
+
 	gl.UseProgram(shader)
 
-	for !window.ShouldClose() {
+	// Set the initial position uniform value
+	gl.Uniform1f(positionUniform, squarePos)
 
+	// Set the key callback function to capture arrow key presses
+	window.SetKeyCallback(func(w *glfw.Window, key glfw.Key, scancode int, action glfw.Action, mods glfw.ModifierKey) {
+		if action == glfw.Press || action == glfw.Repeat {
+			if key == glfw.KeyLeft {
+				squarePos -= 0.01 // Modify this to change the movement speed
+			} else if key == glfw.KeyRight {
+				squarePos += 0.01 // Modify this to change the movement speed
+			}
+		}
+	})
+
+	for !window.ShouldClose() {
 		gl.Clear(gl.COLOR_BUFFER_BIT)
-		//gl.DrawArrays(gl.TRIANGLES, 0, 6)
+
+		// Update the position uniform value
+		gl.Uniform1f(positionUniform, squarePos)
+
 		gl.DrawElements(gl.TRIANGLES, 6, gl.UNSIGNED_INT, gl.PtrOffset(0))
-		//checkErrors()
 
 		window.SwapBuffers()
 		glfw.PollEvents()
